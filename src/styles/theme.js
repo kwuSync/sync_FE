@@ -2,7 +2,7 @@ const theme = {
   colors: {
     primary: "#1A2B4C",      // 메인 컬러
     secondary: "#6272a4",
-    background: "#F5F5F5",
+    background: "#FAFAFA",
     text: "#212529",
     gray: "#adb5bd",
     danger: "#e03131",
