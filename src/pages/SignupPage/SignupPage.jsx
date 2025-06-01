@@ -3,6 +3,7 @@ import * as L from "../../components/common/AuthLayout/AuthLayout.style";
 import * as S from "./SignupPage.style";
 import InputGroup from "../../components/common/Input/InputGroup";
 import Button from "../../components/common/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +18,8 @@ const SignupPage = () => {
   const [agreeMarketing, setAgreeMarketing] = useState(false);
 
   const [notAllow, setNotAllow] = useState(true);
+
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -118,7 +121,7 @@ const SignupPage = () => {
         </S.CheckboxContainer>
 
         <S.ButtonWrapper>
-          <Button onClick={handleSubmit} disabled={notAllow}>
+          <Button onClick={() => navigate("/login")} disabled={notAllow}>
             회원가입
           </Button>
         </S.ButtonWrapper>
