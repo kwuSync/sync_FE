@@ -10,7 +10,7 @@ export const Group = styled.div`
 export const Label = styled.label`
   font-size: 15px;
   padding: 0 4px;
-  color: ${({ theme }) => theme.colors.primary};;
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: 4px;
 `;
 

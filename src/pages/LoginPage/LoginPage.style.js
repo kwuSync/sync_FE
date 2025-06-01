@@ -1,20 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-  width: 320px;
-  margin: 0 auto;
-  padding: 60px 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
-export const Title = styled.h1`
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 40px;
-  color: #0b1f3a;
-`;
 
 export const Form = styled.form`
   width: 100%;
@@ -55,11 +41,11 @@ export const SubText = styled.div`
   margin-top: 20px;
   text-align: center;
   font-size: 14px;
-  color: #0b1f3a;
+  color: ${({ theme }) => theme.colors.primary};;;
 `;
 
 export const LinkText = styled.span`
-  color: #0b1f3a;
+  color: ${({ theme }) => theme.colors.primary};;;
   text-decoration: underline;
   cursor: pointer;
   margin-top: 8px;

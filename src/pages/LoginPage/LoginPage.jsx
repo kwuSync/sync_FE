@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import * as L from "../../components/common/AuthLayout/AuthLayout.style";
 import * as S from "./LoginPage.style";
 import Button from "../../components/common/Button/Button";
 import InputGroup from "../../components/common/Input/InputGroup";
@@ -63,43 +64,44 @@ const LoginPage = () => {
   };
 
   return (
-    <S.Container>
-      <S.Title>로그인</S.Title>
+    <L.PageWrapper>
+      <L.Title>로그인</L.Title>
+      <L.Container>
+        <InputGroup
+          label="이메일"
+          id="email"
+          type="email"
+          placeholder="이메일 입력"
+          value={email}
+          onChange={handleEmail}
+          error={emailError}
+        />
 
-      <InputGroup
-        label="이메일"
-        id="email"
-        type="email"
-        placeholder="이메일 입력"
-        value={email}
-        onChange={handleEmail}
-        error={emailError}
-      />
+        <InputGroup
+          label="비밀번호"
+          id="password"
+          type="password"
+          placeholder="비밀번호 입력"
+          value={pw}
+          onChange={handlePw}
+          error={pwError}
+        />
 
-      <InputGroup
-        label="비밀번호"
-        id="password"
-        type="password"
-        placeholder="비밀번호 입력"
-        value={pw}
-        onChange={handlePw}
-        error={pwError}
-      />
-
-      <S.ButtonWrapper>
-        <Button onClick={handleLogin} disabled={notAllow} style={{ width: "100%" }}>
+        
+        <Button onClick={handleLogin} disabled={notAllow}>
           로그인
         </Button>
-      </S.ButtonWrapper>
+       
 
-      <S.SubText>
-        <S.LinkText onClick={() => navigate("/signup")}>회원가입</S.LinkText>
-        <br />
-        <S.LinkText onClick={() => navigate("/find-password")}>
-          비밀번호를 까먹으셨나요?
-        </S.LinkText>
-      </S.SubText>
-    </S.Container>
+        <S.SubText>
+          <S.LinkText onClick={() => navigate("/signup")}>회원가입</S.LinkText>
+          <br />
+          <S.LinkText onClick={() => navigate("/find-password")}>
+            비밀번호를 까먹으셨나요?
+          </S.LinkText>
+        </S.SubText>
+      </L.Container>
+    </L.PageWrapper>
   );
 };
 
