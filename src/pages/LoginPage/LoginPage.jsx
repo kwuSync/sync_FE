@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 // 예시 유저 정보
 const DEMO_USER = {
-  email: "test@kw.ac.kr",
+  email: "kwuburger@naver.com",
   pw: "test1234!"
 };
 
@@ -91,7 +91,6 @@ const LoginPage = () => {
         <Button onClick={handleLogin} disabled={notAllow}>
           로그인
         </Button>
-       
 
         <S.SubText>
           <S.LinkText onClick={() => navigate("/signup")}>회원가입</S.LinkText>
