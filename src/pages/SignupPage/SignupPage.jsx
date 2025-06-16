@@ -7,6 +7,10 @@ import { useNavigate } from "react-router-dom";
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [isCodeSent, setIsCodeSent] = useState(false);
+  const [isCodeVerified, setIsCodeVerified] = useState(false);
+
   const [pw, setPw] = useState("");
   const [pwCheck, setPwCheck] = useState("");
 
@@ -42,38 +46,76 @@ const SignupPage = () => {
     return "";
   };
 
+  const handleSendCode = () => {
+    if (validateEmail(email)) {
+      setEmailError(validateEmail(email));
+      return;
+    }
+    alert("인증번호가 전송되었습니다.");
+    setIsCodeSent(true);
+  };
+
+  const handleVerifyCode = () => {
+    if (code === "5026") {
+      alert("인증 완료!");
+      setIsCodeVerified(true);
+    } else {
+      alert("인증번호가 올바르지 않습니다.");
+    }
+  };
+
   const handleSubmit = () => {
-    alert("회원가입 성공! (실제 처리 로직은 아직 없음)");
+    alert("회원가입 성공!");
+    navigate("/login");
   };
 
   useEffect(() => {
-    const validEmail = !validateEmail(email);
     const validPw = !validatePassword(pw);
     const validPwCheck = !validatePasswordCheck(pw, pwCheck);
     const validAgree = agreeTerms;
 
-    setNotAllow(!(validEmail && validPw && validPwCheck && validAgree));
-  }, [email, pw, pwCheck, agreeTerms]);
+    setNotAllow(!(isCodeVerified && validPw && validPwCheck && validAgree));
+  }, [pw, pwCheck, agreeTerms, isCodeVerified]);
 
   return (
-
-    
     <L.PageWrapper>
       <L.Title>회원가입</L.Title>
       <L.Container>
-        <InputGroup
-          label="이메일"
-          id="email"
-          type="email"
-          placeholder="이메일 입력"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setEmailError(validateEmail(e.target.value));
-          }}
-          error={emailError}
-        />
+        {/* 이메일 인증 영역 */}
+        <S.GroupWrapper>
+          <S.Label htmlFor="email">이메일</S.Label>
+          <S.InputGroup>
+            <S.Input
+              id="email"
+              type="email"
+              placeholder="이메일 입력"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setEmailError(validateEmail(e.target.value));
+              }}
+            />
+            <S.SmallButton onClick={handleSendCode}>전송</S.SmallButton>
+          </S.InputGroup>
+          {emailError && <S.ErrorMessage>{emailError}</S.ErrorMessage>}
+        </S.GroupWrapper>
 
+        <S.GroupWrapper>
+          <S.Label htmlFor="code">인증번호</S.Label>
+          <S.InputGroup>
+            <S.Input
+              id="code"
+              type="text"
+              placeholder="인증번호 입력"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              disabled={!isCodeSent}
+            />
+            <S.SmallButton onClick={handleVerifyCode}>확인</S.SmallButton>
+          </S.InputGroup>
+      </S.GroupWrapper>
+
+        {/* 비밀번호 입력 영역 */}
         <InputGroup
           label="비밀번호"
           id="password"
@@ -100,6 +142,7 @@ const SignupPage = () => {
           error={pwCheckError}
         />
 
+        {/* 약관 동의 */}
         <S.CheckboxContainer>
           <label>
             <input
@@ -120,8 +163,9 @@ const SignupPage = () => {
           </label>
         </S.CheckboxContainer>
 
+        {/* 회원가입 버튼 */}
         <S.ButtonWrapper>
-          <Button onClick={() => navigate("/login")} disabled={notAllow}>
+          <Button onClick={handleSubmit} disabled={notAllow}>
             회원가입
           </Button>
         </S.ButtonWrapper>
