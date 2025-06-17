@@ -1,3 +1,4 @@
+// src/pages/SignupPage/SignupPage.style.js
 import styled from "styled-components";
 
 export const CheckboxContainer = styled.div`
@@ -23,7 +24,8 @@ export const ButtonWrapper = styled.div`
   width: 100%;
   margin-top: 30px;
   display: flex;
-  justify-content: center;
+  flex-direction: column; /* 추가: 버튼과 메시지를 세로로 정렬 */
+  align-items: center; /* 추가: 가로 중앙 정렬 */
 `;
 
 export const InputGroup = styled.div`
@@ -42,9 +44,9 @@ export const Input = styled.input`
   font-size: 14px;
 
   &:disabled {
-    background-color: #e1e1e1;  // ✅ 원하는 배경색
-    color: #333;                // ✅ 텍스트 색상도 바꾸고 싶다면
-    opacity: 1;                 // ✅ 기본 흐릿함 제거
+    background-color: #e1e1e1; 
+    color: #333; 
+    opacity: 1; 
     cursor: not-allowed;
   }
 `;
@@ -67,8 +69,8 @@ export const SmallButton = styled.button`
 
 export const ErrorMessage = styled.div`
   font-size: 13px;
-  color: red;
-  margin-top: -6px;
+  color: ${props => (props.isSuccess ? 'green' : 'red')}; /* 수정: isSuccess prop에 따라 색상 변경 */
+  margin-top: 5px; /* 조정: 메시지가 조금 더 떨어지게 */
   margin-bottom: 6px;
 `;
 

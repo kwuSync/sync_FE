@@ -18,7 +18,7 @@ export const Title = styled.h1`
 export const Container = styled.div`
   width: 320px;
   margin: 0 auto;
-  padding: 60px 20px;
+  padding: 20px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
