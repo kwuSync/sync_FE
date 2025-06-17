@@ -1,15 +1,11 @@
+// src/pages/LoginPage/LoginPage.jsx
 import React, { useState, useEffect } from "react";
 import * as L from "../../components/common/AuthLayout/AuthLayout.style";
 import * as S from "./LoginPage.style";
 import Button from "../../components/common/Button/Button";
 import InputGroup from "../../components/common/Input/InputGroup";
 import { useNavigate } from "react-router-dom";
-
-// 예시 유저 정보
-const DEMO_USER = {
-  email: "kwuburger@naver.com",
-  pw: "test1234!"
-};
+import { login } from "../../api/authApi"; // 변경된 login 함수 임포트
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -54,12 +50,25 @@ const LoginPage = () => {
     setNotAllow(!(isEmailValid && isPwValid));
   }, [email, pw]);
 
-  const handleLogin = () => {
-    if (email === DEMO_USER.email && pw === DEMO_USER.pw) {
+  const handleLogin = async () => {
+    // 유효성 검사 최종 확인
+    if (emailError || pwError || !email || !pw) {
+        alert("이메일과 비밀번호를 올바르게 입력해주세요.");
+        return;
+    }
+
+    try {
+      const response = await login(email, pw);
+      console.log("로그인 성공:", response);
       alert("로그인 성공! 🎉");
       navigate("/news");
-    } else {
-      alert("예시 아이디 또는 비밀번호가 일치하지 않습니다.");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      // 서버에서 전달하는 구체적인 에러 메시지가 있다면 활용
+      const errorMessage = error.response && error.response.data && error.response.data.message
+                           ? error.response.data.message
+                           : "로그인 실패. 이메일 또는 비밀번호를 확인해주세요.";
+      alert(errorMessage);
     }
   };
 
@@ -87,7 +96,6 @@ const LoginPage = () => {
           error={pwError}
         />
 
-        
         <Button onClick={handleLogin} disabled={notAllow}>
           로그인
         </Button>
