@@ -30,7 +30,7 @@ const NewsListPage = () => {
             return {
               ...newsItem,
               // summary API에서 가져온 generated_keywords를 추가
-              generated_keywords: summaryData.generated_keywords || [],
+              generated_keywords: summaryData.generatedKeywords || [],
             };
           } catch (detailError) {
             console.warn(`뉴스 ID ${newsItem.clusterId}의 키워드를 불러오는 데 실패했습니다.`, detailError);

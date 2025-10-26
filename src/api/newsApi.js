@@ -4,6 +4,7 @@ import { API_ENDPOINTS } from './apiConfig'; // 올바른 임포트 이름
 
 // 뉴스 목록을 가져오는 함수 (NewsListPage에 사용)
 export const getNewsList = async () => {
+  
   try {
     const response = await axiosInstance.get(API_ENDPOINTS.newsList); // <--- 여기서 API_ENDpoints -> API_ENDPOINTS 로 수정
     return response.data.data.newsList;

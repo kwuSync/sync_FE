@@ -106,7 +106,8 @@ const SignupPage = () => {
 
     try {
       const response = await verifyCode(email, code);
-      if (response === true) {
+      console.log("인증번호 확인 응답:", response);
+      if (response.data === true) {
         setVerificationMessage("이메일 인증이 완료되었습니다!");
         setIsCodeVerified(true);
       } else {
