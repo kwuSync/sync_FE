@@ -6,29 +6,6 @@ export const PageWrapper = styled.div`
 `;
 
 
-// 고정 헤더
-export const Header = styled.header`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 70px;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  border-bottom: 1px solid #ddd;
-  z-index: 999;
-`;
-
-// 헤더 안의 제목
-export const HeaderTitle = styled.h1`
-
-  font-size: 28px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.primary};
-`;
-
-
 // 뉴스 제목 (크게)
 export const Title = styled.h2`
   padding: 40px 24px 0 ;
@@ -110,18 +87,4 @@ export const Comment = styled.li`
   border-radius: 8px;
   font-size: 14px;
   color: #222;
-`;
-
-export const TTSButton = styled.button`
-  margin-left: auto;
-  font-size: 13px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: #f4f4f4;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #eee;
-  }
 `;
