@@ -11,4 +11,10 @@ export const API_ENDPOINTS = {
   // --- 뉴스 관련 엔드포인트 ---
   newsList: `${BASE_URL}/main/news`, // 뉴스 목록 조회
   newsSummary: (clusterId) => `${BASE_URL}/main/cluster/${clusterId}/summary`, // 뉴스 요약 조회
+
+ // ---  댓글 관련 엔드포인트  ---
+  getComments: (clusterId) => `${BASE_URL}/cluster/${clusterId}/comment`,
+  postComment: (clusterId) => `${BASE_URL}/cluster/${clusterId}/comment`,
+  updateComment: (clusterId, commentId) => `${BASE_URL}/cluster/${clusterId}/comment/${commentId}`,
+  deleteComment: (clusterId, commentId) => `${BASE_URL}/cluster/${clusterId}/comment/${commentId}`,
 };
