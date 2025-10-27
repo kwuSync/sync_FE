@@ -87,4 +87,74 @@ export const Comment = styled.li`
   border-radius: 8px;
   font-size: 14px;
   color: #222;
+  /* ⬇️ 추가: 댓글 내 컨텐츠 정렬 */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+// ⬇️ --- 추가된 스타일 --- ⬇️
+
+// 댓글 상단 (작성자 + 버튼)
+export const CommentInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+// 댓글 작성자
+export const CommentAuthor = styled.span`
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+`;
+
+// 댓글 본문
+export const CommentText = styled.p`
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+  white-space: pre-line; /* 줄바꿈 적용 */
+`;
+
+// 수정/삭제 버튼 컨테이너
+export const ButtonContainer = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+// 수정/삭제 버튼
+export const CommentButton = styled.button`
+  font-size: 13px;
+  color: #777;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  
+  &:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+`;
+
+// 수정 모드 Wrapper
+export const EditWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+`;
+
+// 댓글 수정용 Textarea
+export const CommentEditTextarea = styled.textarea`
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.5;
+  min-height: 60px;
 `;

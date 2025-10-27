@@ -25,15 +25,47 @@ export const getNewsSummary = async (clusterId) => {
   }
 };
 
-// 댓글 제출 함수 (기존 유지, 필요시 API 연동)
-export const submitComment = async (newsId, commentText) => {
+// ⬇️ 1. 댓글 목록 조회 (GET) ⬇️
+export const getComments = async (clusterId) => {
   try {
-    // 이 부분은 백엔드에 댓글 API가 있다면 해당 API로 변경해야 합니다.
-    // 현재는 더미 응답을 반환하도록 예시로 둡니다.
-    console.log(`Submitting comment "${commentText}" for news ID ${newsId}`);
-    return { success: true, comment: commentText };
+    const response = await axiosInstance.get(API_ENDPOINTS.getComments(clusterId));
+    // 백엔드 응답 구조에 따라 .data.data.comments 등으로 조정 필요
+    return response.data.data; 
+  } catch (error) {
+    console.error(`Error fetching comments for cluster ID ${clusterId}:`, error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+// ⬇️ 2. 댓글 제출 (POST) - ⬇️
+export const submitComment = async (clusterId, commentText) => {
+  try {
+    const response = await axiosInstance.post(API_ENDPOINTS.postComment(clusterId), { commentText }); 
+    return response.data.data; // 새로 생성된 댓글 객체 반환
   } catch (error) {
     console.error('Error submitting comment:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+// ⬇️ 3. 댓글 수정 (PATCH) ⬇️
+export const updateComment = async (clusterId, commentId, commentText) => {
+  try {
+    const response = await axiosInstance.patch(API_ENDPOINTS.updateComment(clusterId, commentId), { content: commentText });
+    return response.data.data; // 수정된 댓글 객체 반환
+  } catch (error) {
+    console.error('Error updating comment:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+// ⬇️ 4. 댓글 삭제 (DELETE) ⬇️
+export const deleteComment = async (clusterId, commentId) => {
+  try {
+    const response = await axiosInstance.delete(API_ENDPOINTS.deleteComment(clusterId, commentId));
+    return response.data; // 성공 메시지 반환
+  } catch (error) {
+    console.error('Error deleting comment:', error.response ? error.response.data : error.message);
     throw error;
   }
 };
