@@ -6,10 +6,9 @@ import Button from "../../components/common/Button/Button";
 import InputGroup from "../../components/common/Input/InputGroup";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api/authApi";
-// ⬇️ 수정: tokenManger -> tokenManager (오타 수정)
 import tokenManager from "../../api/tokenManager"; 
-// ⬇️ 참고: axiosInstance는 이 파일에서 직접 사용되진 않네요. (authApi.js에서 사용)
-import axiosInstance from "../../api/axiosInstance";
+// 1. InfoModal 임포트
+import InfoModal from "../../components/common/InfoModal/InfoModal";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,7 +20,16 @@ const LoginPage = () => {
   const [pwError, setPwError] = useState("");
   const [notAllow, setNotAllow] = useState(true);
 
-  // --- 유효성 검사 함수 (변경 없음) ---
+  // 2. 모달 상태 추가 (객체로 관리)
+  const [modalInfo, setModalInfo] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    isError: false,
+    onClose: () => {}, // 모달 닫기 시 실행할 콜백
+  });
+
+  // ... (validateEmail, validatePassword, handleEmail, handlePw, useEffect는 변경 없음) ...
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) return "이메일을 입력해주세요.";
@@ -55,34 +63,43 @@ const LoginPage = () => {
     setNotAllow(!(isEmailValid && isPwValid));
   }, [email, pw]);
 
-  // --- ⬇️ 여기가 핵심 수정 사항입니다 ⬇️ ---
+
+  // 3. handleLogin 함수 수정 (alert -> setModalInfo)
   const handleLogin = async () => {
-    // 유효성 검사 최종 확인
     if (emailError || pwError || !email || !pw) {
-      alert("이메일과 비밀번호를 올바르게 입력해주세요.");
+      // 유효성 검사 실패 시 모달
+      setModalInfo({
+        isOpen: true,
+        title: "입력 오류",
+        message: "이메일과 비밀번호를 올바르게 입력해주세요.",
+        isError: true,
+        onClose: () => setModalInfo({ isOpen: false }),
+      });
       return;
     }
 
     try {
-      // 1. authApi.js의 login 함수 호출
-      // (login 함수가 { accessToken: '...', refreshToken: '...' } 객체를 반환한다고 가정)
       const response = await login(email, pw);
       console.log("로그인 성공 응답:", response);
 
-      // 2. 응답 객체에서 토큰 추출
-      // (만약 response.data.accessToken 형태라면 { accessToken, refreshToken } = response.data 로 수정 필요)
       const { accessToken, refreshToken } = response.data; 
 
       if (accessToken && refreshToken) {
-        // 3. 토큰 매니저를 사용하여 토큰 저장
-        tokenManager.setToken(accessToken);       // Access Token -> 메모리
-        tokenManager.setRefreshToken(refreshToken); // Refresh Token -> 세션 스토리지
+        tokenManager.setToken(accessToken);
+        tokenManager.setRefreshToken(refreshToken);
 
-        // 4. 로그인 성공 처리
-        alert("로그인 성공! 🎉");
-        navigate("/news"); // 메인 뉴스 페이지로 이동
+        // 4. 로그인 성공 시 모달
+        setModalInfo({
+          isOpen: true,
+          title: "로그인 성공! 🎉",
+          message: "뉴스 페이지로 이동합니다.",
+          isError: false,
+          onClose: () => {
+            setModalInfo({ isOpen: false });
+            navigate("/news"); // 모달을 닫은 후 페이지 이동
+          },
+        });
       } else {
-        // API는 성공(200)했지만 응답에 토큰이 없는 비정상 케이스
         throw new Error("로그인 응답에 토큰이 포함되지 않았습니다.");
       }
 
@@ -90,17 +107,39 @@ const LoginPage = () => {
       console.error("로그인 실패:", error);
       const errorMessage = error.response && error.response.data && error.response.data.message
                             ? error.response.data.message
-                            : "로그인 실패. 이메일 또는 비밀번호를 확인해주세요.";
-      alert(errorMessage);
+                            : "로그인 실패.\n이메일 또는 비밀번호를 확인해주세요.";
+      
+      // 5. 로그인 실패(API) 시 모달
+      setModalInfo({
+        isOpen: true,
+        title: "로그인 실패",
+        message: errorMessage,
+        isError: true,
+        onClose: () => setModalInfo({ isOpen: false }),
+      });
     }
   };
-  // --- ⬆️ 수정 완료 ⬆️ ---
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !notAllow) {
+      handleLogin();
+    }
+  };
 
   return (
     <L.PageWrapper>
+      {/* 6. 모달 컴포넌트 렌더링 */}
+      <InfoModal
+        isOpen={modalInfo.isOpen}
+        title={modalInfo.title}
+        message={modalInfo.message}
+        isError={modalInfo.isError}
+        onClose={modalInfo.onClose}
+      />
+
       <L.Title>로그인</L.Title>
       <L.Container>
-        {/* ... (InputGroup 및 Button 등 JSX 코드는 변경 없음) ... */}
+        {/* ... (InputGroup, Button, SubText 등 나머지 JSX) ... */}
         <InputGroup
           label="이메일"
           id="email"
@@ -109,6 +148,7 @@ const LoginPage = () => {
           value={email}
           onChange={handleEmail}
           error={emailError}
+          onKeyDown={handleKeyPress}
         />
 
         <InputGroup
@@ -119,6 +159,7 @@ const LoginPage = () => {
           value={pw}
           onChange={handlePw}
           error={pwError}
+          onKeyDown={handleKeyPress}
         />
 
         <Button onClick={handleLogin} disabled={notAllow}>
@@ -129,9 +170,9 @@ const LoginPage = () => {
           <S.LinkText onClick={() => navigate("/signup")}>회원가입</S.LinkText>
           <br />
           <S.LinkText onClick={() => navigate("/find-password")}>
-            비밀번호를 까먹으셨나요?
+          비밀번호를 까먹으셨나요?
           </S.LinkText>
-        </S.SubText>
+      </S.SubText>
       </L.Container>
     </L.PageWrapper>
   );
