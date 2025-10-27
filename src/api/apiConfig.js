@@ -1,23 +1,20 @@
-// 개발 환경과 배포 환경에 따라 URL을 다르게 설정할 수 있습니다.
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://newsync.kr/';
-
 export const API_ENDPOINTS = {
   // --- 인증 관련 엔드포인트 ---
-  login: `${BASE_URL}/user/login`,
-  signup: `${BASE_URL}/user/join`,
-  sendEmailCode: `${BASE_URL}/mail/send`, 
-  verifyEmailCode: `${BASE_URL}/mail/verify`,
-  logout: `${BASE_URL}/user/logout`, 
-  deleteUser: `${BASE_URL}/user`,
-  updateUser: `${BASE_URL}/user`,    
+  login: `/user/login`,
+  signup: `/user/join`,
+  sendEmailCode: `/mail/send`,
+  verifyEmailCode: `/mail/verify`,
+  logout: `/user/logout`,
+  deleteUser: `/user`,
+  updateUser: `/user`,
 
   // --- 뉴스 관련 엔드포인트 ---
-  newsList: `${BASE_URL}/main/news`, // 뉴스 목록 조회
-  newsSummary: (clusterId) => `${BASE_URL}/main/cluster/${clusterId}/summary`, // 뉴스 요약 조회
+  newsList: `/main/news`, // 뉴스 목록 조회
+  newsSummary: (clusterId) => `/main/cluster/${clusterId}/summary`, // 뉴스 요약 조회
 
   // --- 댓글 관련 엔드포인트 ---
-  getComments: (clusterId) => `${BASE_URL}/cluster/${clusterId}/comment`,
-  postComment: (clusterId) => `${BASE_URL}/cluster/${clusterId}/comment`,
-  updateComment: (clusterId, commentId) => `${BASE_URL}/cluster/${clusterId}/comment/${commentId}`,
-  deleteComment: (clusterId, commentId) => `${BASE_URL}/cluster/${clusterId}/comment/${commentId}`,
+  getComments: (clusterId) => `/cluster/${clusterId}/comment`,
+  postComment: (clusterId) => `/cluster/${clusterId}/comment`,
+  updateComment: (clusterId, commentId) => `/cluster/${clusterId}/comment/${commentId}`,
+  deleteComment: (clusterId, commentId) => `/cluster/${clusterId}/comment/${commentId}`,
 };

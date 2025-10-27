@@ -6,11 +6,8 @@ import { RouterProvider } from 'react-router-dom';
 import router from './routes/pagesRoutes';
 import { TTSProvider } from './contexts/TTSContext';
 
-import axios from 'axios'; 
 import tokenManager from './api/tokenManager';
-
-const REFRESH_URL = '/reissue'; 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+import { reissueToken } from './api/authApi';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,18 +18,7 @@ const App = () => {
       
       if (refreshToken) {
         try {
-          // --- ⬇️ 여기가 최종 수정된 부분입니다 ⬇️ ---
-          const response = await axios.post(
-            `${API_BASE_URL}${REFRESH_URL}`, // URL
-            refreshToken,                   // Body: 순수 토큰 문자열
-            {                               // Config
-              headers: { 'Content-Type': 'text/plain' } 
-            }
-          );
-          // --- ⬆️ 수정 완료 ⬆️ ---
-
-          // (응답 형식은 이전에 확인한 .data.data.accessToken이 맞다고 가정)
-          const { accessToken } = response.data.data;
+          const { accessToken } = await reissueToken(refreshToken);
           
           if (accessToken) {
             tokenManager.setToken(accessToken);
