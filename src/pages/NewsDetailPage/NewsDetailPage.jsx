@@ -1,11 +1,11 @@
 // src/pages/NewsDetailPage/NewsDetailPage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import { newsClusters } from "../../data/newsData"; // 정적 데이터는 더 이상 사용하지 않음
 import { getNewsSummary, submitComment } from "../../api/newsApi"; // API 함수 임포트
 import * as S from "./NewsDetailPage.style";
 import Button from "../../components/common/Button/Button";
 import { useTTS } from "../../contexts/TTSContext";
+import Header from "../../components/common/Header/Header"; // 1. 공통 Header 임포트
 
 const NewsDetailPage = () => {
   const { id } = useParams(); // URL 파라미터는 cluster_id
@@ -15,7 +15,8 @@ const NewsDetailPage = () => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
 
-  const { speak, togglePause, stop, isSpeaking, isPaused } = useTTS();
+  // 2. Header가 TTS 상태를 관리하므로 speak, stop만 가져옵니다.
+  const { speak, stop } = useTTS();
 
   useEffect(() => {
     stop(); // 페이지 진입 시 기존 음성 멈추기
@@ -31,7 +32,7 @@ const NewsDetailPage = () => {
       }
     };
     fetchNewsDetail();
-  }, [id]);
+  }, [id]); //
 
   const handleCommentSubmit = async () => {
     if (comment.trim()) {
@@ -49,15 +50,16 @@ const NewsDetailPage = () => {
     }
   };
 
+  console.log("clusterDetail:", clusterDetail); // 디버그용 로그
   const handleTTSClick = () => {
     if (!clusterDetail) return;
 
     const text = `
-      제목: ${clusterDetail.generated_title}.
+      제목: ${clusterDetail.generatedTitle}.
       뉴스 요약: ${clusterDetail.summary.article}.
       뉴스 배경지식: ${clusterDetail.summary.background}.
     `;
-    speak(text);
+    speak(text); //
   };
 
   if (loading) return <div>뉴스 데이터를 불러오는 중입니다...</div>;
@@ -66,14 +68,10 @@ const NewsDetailPage = () => {
 
   return (
     <S.PageWrapper>
-      <S.Header>
-        <S.HeaderTitle>오늘의 뉴스</S.HeaderTitle>
-        <S.TTSButton onClick={() => (isSpeaking ? togglePause() : handleTTSClick())}>
-          {isPaused ? "▶️" : isSpeaking ? "⏸️" : "📢"}
-        </S.TTSButton>
-      </S.Header>
+      {/* 3. 기존 S.Header JSX를 Header 컴포넌트로 교체 */}
+      <Header onTTSClick={handleTTSClick} />
 
-      <S.Title>{clusterDetail.generated_title}</S.Title>
+      <S.Title>{clusterDetail.generatedTitle}</S.Title>
       <S.Divider />
 
       <S.Section>
