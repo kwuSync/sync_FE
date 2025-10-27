@@ -1,5 +1,6 @@
 // src/pages/NewsDetailPage/NewsDetailPage.jsx
 import React, { useEffect, useState } from "react";
+<<<<<<< HEAD
 // ⬇️ 1. useNavigate 임포트
 import { useParams, useNavigate } from "react-router-dom"; 
 import { getNewsSummary, submitComment } from "../../api/newsApi";
@@ -7,6 +8,14 @@ import * as S from "./NewsDetailPage.style";
 import Button from "../../components/common/Button/Button";
 import { useTTS } from "../../contexts/TTSContext";
 import Header from "../../components/common/Header/Header";
+=======
+import { useParams } from "react-router-dom";
+import { getNewsSummary, submitComment } from "../../api/newsApi"; // API 함수 임포트
+import * as S from "./NewsDetailPage.style";
+import Button from "../../components/common/Button/Button";
+import { useTTS } from "../../contexts/TTSContext";
+import Header from "../../components/common/Header/Header"; // 1. 공통 Header 임포트
+>>>>>>> 87934aa4f157d778f8eec083b1b82a07b95a4a05
 
 const NewsDetailPage = () => {
   const { id } = useParams();
@@ -16,10 +25,15 @@ const NewsDetailPage = () => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
 
+<<<<<<< HEAD
   const { speak, stop } = useTTS();
   
   // ⬇️ 2. navigate 함수 생성
   const navigate = useNavigate();
+=======
+  // 2. Header가 TTS 상태를 관리하므로 speak, stop만 가져옵니다.
+  const { speak, stop } = useTTS();
+>>>>>>> 87934aa4f157d778f8eec083b1b82a07b95a4a05
 
   useEffect(() => {
     stop();
@@ -35,7 +49,7 @@ const NewsDetailPage = () => {
       }
     };
     fetchNewsDetail();
-  }, [id]);
+  }, [id]); //
 
   const handleCommentSubmit = async () => {
     if (comment.trim()) {
@@ -52,6 +66,7 @@ const NewsDetailPage = () => {
     }
   };
 
+  console.log("clusterDetail:", clusterDetail); // 디버그용 로그
   const handleTTSClick = () => {
     if (!clusterDetail) return;
     const text = `
@@ -59,7 +74,7 @@ const NewsDetailPage = () => {
       뉴스 요약: ${clusterDetail.summary.article}.
       뉴스 배경지식: ${clusterDetail.summary.background}.
     `;
-    speak(text);
+    speak(text); //
   };
 
   // ⬇️ 3. 타이틀 클릭 시 /news (목록)로 이동하는 함수
@@ -73,10 +88,15 @@ const NewsDetailPage = () => {
 
   return (
     <S.PageWrapper>
+<<<<<<< HEAD
       <Header 
         onTTSClick={handleTTSClick} 
         onTitleClick={handleTitleClick} 
       />
+=======
+      {/* 3. 기존 S.Header JSX를 Header 컴포넌트로 교체 */}
+      <Header onTTSClick={handleTTSClick} />
+>>>>>>> 87934aa4f157d778f8eec083b1b82a07b95a4a05
 
       <S.Title>{clusterDetail.generatedTitle}</S.Title>
       <S.Divider />

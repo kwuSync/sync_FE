@@ -1,5 +1,5 @@
 // 개발 환경과 배포 환경에 따라 URL을 다르게 설정할 수 있습니다.
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://newsync.kr/';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
 
 export const API_ENDPOINTS = {
   // --- 인증 관련 엔드포인트 ---
