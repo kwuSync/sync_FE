@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./NewsListPage.style";
-import { getNewsList, getNewsSummary } from "../../api/newsApi"; // getNewsSummary 임포트 추가
+import { getNewsList, getNewsSummary } from "../../api/newsApi";
 import { useTTS } from "../../contexts/TTSContext";
+import Header from "../../components/common/Header/Header"; // 1. 공통 Header 임포트
 
 const NewsListPage = () => {
   const navigate = useNavigate();
-  const { speak, togglePause, stop, isSpeaking, isPaused } = useTTS();
+  // 2. Header가 TTS 상태를 관리하므로 speak, stop만 가져옵니다.
+  const { speak, stop } = useTTS();
 
   const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +55,7 @@ const NewsListPage = () => {
     };
 
     fetchNewsWithKeywords();
-  }, []);
+  }, []); //
 
   // newsList가 비동기로 채워지므로, 로딩 상태를 한 번 더 확인합니다.
   const allKeywords = newsList.flatMap((news) => news.generated_keywords || []);
@@ -64,7 +66,7 @@ const NewsListPage = () => {
     const combinedText = newsList
       .map((news, i) => `뉴스 ${i + 1}. ${news.title}. 요약 내용: ${news.summaryText}`)
       .join(". ");
-    speak(combinedText);
+    speak(combinedText); //
   };
 
   if (loading) return <div>뉴스 데이터를 불러오는 중입니다...</div>;
@@ -73,12 +75,8 @@ const NewsListPage = () => {
 
   return (
     <S.PageWrapper>
-      <S.Header>
-        <S.HeaderTitle>오늘의 뉴스</S.HeaderTitle>
-        <S.TTSButton onClick={() => (isSpeaking ? togglePause() : handleTTSClick())}>
-          {isPaused ? "▶️" : isSpeaking ? "⏸️" : "📢"}
-        </S.TTSButton>
-      </S.Header>
+      {/* 3. 기존 S.Header JSX를 Header 컴포넌트로 교체 */}
+      <Header onTTSClick={handleTTSClick} />
 
       <S.KeywordSection>
         <S.KeywordTitle>오늘의 키워드</S.KeywordTitle>
