@@ -57,3 +57,55 @@ export const signup = async (nickname, email, password, passwordConfirm, authNum
     throw error;
   }
 };
+
+
+// 로그아웃 API 호출 (POST /user/logout)
+
+export const logout = async () => {
+  try {
+    // API 명세상 body 없이 POST 요청
+    const response = await axiosInstance.post(API_ENDPOINTS.logout);
+    return response.data;
+  } catch (error) {
+    console.error('로그아웃 실패:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+/**
+ * 회원 정보 수정 API (PATCH /user)
+ * @param {string} email - (Query Param) 현재 이메일
+ * @param {string} nickname - (Body) 새 닉네임
+ * @param {string} password - (Body) 새 비밀번호
+ * @param {string} passwordConfirm - (Body) 새 비밀번호 확인
+ */
+
+export const updateUser = async (email, nickname, password, passwordConfirm) => {
+  try {
+    const body = { nickname, password, passwordConfirm };
+    const config = {
+      params: { email } // 쿼리 파라미터
+    };
+
+    // axios.patch(url, body, config)
+    const response = await axiosInstance.patch(API_ENDPOINTS.updateUser, body, config);
+    return response.data;
+  } catch (error) {
+    console.error('회원정보 수정 실패:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+export const deleteUser = async (email, password) => {
+  try {
+    // API 명세상 email, password를 body에 담아 DELETE 요청
+    // axios.delete에서 body를 보내려면 { data: { ... } } 형태로 감싸야 합니다.
+    const response = await axiosInstance.delete(API_ENDPOINTS.deleteUser, {
+      data: { email, password },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('회원 탈퇴 실패:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};

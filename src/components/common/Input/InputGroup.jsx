@@ -9,6 +9,7 @@ const InputGroup = ({
   value,
   onChange,
   error,
+  ...props
 }) => {
   return (
     <S.Group>
@@ -19,6 +20,7 @@ const InputGroup = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        {...props}
       />
       {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
     </S.Group>

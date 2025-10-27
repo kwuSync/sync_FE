@@ -9,6 +9,7 @@ export const Header = styled.header`
   background-color: white;
   display: flex;
   align-items: center;
+  justify-content: space-between; /* 1. space-between으로 변경 */
   padding: 0 20px;
   border-bottom: 1px solid #ddd;
   z-index: 999;
@@ -23,8 +24,9 @@ export const HeaderTitle = styled.h1`
   cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'default')};
 `;
 
+// 2. 기존 TTSButton에서 margin-left: auto 제거
 export const TTSButton = styled.button`
-  margin-left: auto;
+  /* margin-left: auto; <- 제거 */
   font-size: 13px;
   padding: 6px 12px;
   border-radius: 6px;
@@ -35,4 +37,18 @@ export const TTSButton = styled.button`
   &:hover {
     background-color: #eee;
   }
+`;
+
+// 3. 햄버거 버튼 아이콘 추가
+export const HamburgerButton = styled.button`
+  font-size: 28px;
+  color: ${({ theme }) => theme.colors.primary};
+  padding: 4px 8px;
+  margin-left: 16px; /* TTS 버튼과의 간격 */
+`;
+
+// 4. 버튼들을 묶을 Wrapper 추가 (TTS + 햄버거)
+export const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
