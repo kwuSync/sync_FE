@@ -51,7 +51,7 @@ export const submitComment = async (clusterId, commentText) => {
 // ⬇️ 3. 댓글 수정 (PATCH) ⬇️
 export const updateComment = async (clusterId, commentId, commentText) => {
   try {
-    const response = await axiosInstance.patch(API_ENDPOINTS.updateComment(clusterId, commentId), { content: commentText });
+    const response = await axiosInstance.patch(API_ENDPOINTS.updateComment(clusterId, commentId), { commentText });
     return response.data.data; // 수정된 댓글 객체 반환
   } catch (error) {
     console.error('Error updating comment:', error.response ? error.response.data : error.message);
