@@ -1,6 +1,9 @@
 // src/api/authApi.js
-import axiosInstance from './axiosInstance'; // axiosInstance 임포트
+import axios from 'axios';
+import axiosInstance, { API_BASE_URL } from './axiosInstance'; // axiosInstance 임포트
 import { API_ENDPOINTS } from './apiConfig';
+
+const REFRESH_URL = '/reissue';
 
 // 로그인 api 호출
 export const login = async (email, password) => {
@@ -106,6 +109,22 @@ export const deleteUser = async (email, password) => {
     return response.data;
   } catch (error) {
     console.error('회원 탈퇴 실패:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+// 토큰 재발급 API 호출
+export const reissueToken = async (refreshToken) => {
+  try {
+    // ⭐️ 이 요청만 axiosInstance가 아닌 raw axios를 사용
+    const response = await axios.post(
+      `${API_BASE_URL}${REFRESH_URL}`, // 갱신 API만 절대 경로 직접 조립
+      refreshToken,                 
+      { headers: { 'Content-Type': 'text/plain' } }
+    );
+    return response.data.data; // { accessToken } 반환
+  } catch (error) {
+    console.error('Token reissue failed:', error);
     throw error;
   }
 };
