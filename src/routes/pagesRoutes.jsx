@@ -2,30 +2,64 @@ import { createBrowserRouter } from "react-router-dom";
 import React from "react";
 import { routes } from "./routes.jsx";
 
+// 1. 방금 만든 라우트 가드 컴포넌트들을 임포트합니다.
+import PrivateRoute from "./PrivateRoute.jsx";
+import PublicOnlyRoute from "./PublicOnlyRoute.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <routes.Intro />,
+    // 2. PublicOnlyRoute로 감싸줍니다. (로그인 시 접근 불가)
+    element: (
+      <PublicOnlyRoute>
+        <routes.Intro />
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: "/login",
-    element: <routes.Login />,
+    // 3. PublicOnlyRoute로 감싸줍니다. (로그인 시 접근 불가)
+    element: (
+      <PublicOnlyRoute>
+        <routes.Login />
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: "/signup",
-    element: <routes.Signup />,
+    // 4. PublicOnlyRoute로 감싸줍니다. (로그인 시 접근 불가)
+    element: (
+      <PublicOnlyRoute>
+        <routes.Signup />
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: "/find-password",
-    element: <routes.FindPassword />,
+    // 5. PublicOnlyRoute로 감싸줍니다. (로그인 시 접근 불가)
+    element: (
+      <PublicOnlyRoute>
+        <routes.FindPassword />
+      </PublicOnlyRoute>
+    ),
   },
   {
     path: "/news",
-    element: <routes.NewsList />,
+    // 6. PrivateRoute로 감싸줍니다. (로그인 필수)
+    element: (
+      <PrivateRoute>
+        <routes.NewsList />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/news/:id",
-    element: <routes.NewsDetail />,
+    // 7. PrivateRoute로 감싸줍니다. (로그인 필수)
+    element: (
+      <PrivateRoute>
+        <routes.NewsDetail />
+      </PrivateRoute>
+    ),
   },
 ]);
 
