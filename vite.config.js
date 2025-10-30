@@ -7,13 +7,13 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // ⬇️ 백엔드 개발자님이 알려주신 새 IP로 변경
-        target: 'https://newsync.kr', 
-        changeOrigin: true, // CORS 해결용
-        
-        // ⬇️ (★핵심★) '/api' 경로를 제거하는 설정은 그대로 유지!
-        rewrite: (path) => path.replace(/^\/api/, ''),
-      },
-    },
-  },
+        target: 'https://api.newsync.kr',
+        changeOrigin: true,
+        // 👇 이 부분의 주석을 해제하세요.
+        // '/api'로 시작하는 경로를 빈 문자열('')로 바꿔서
+        // '/api/user/login' -> '/user/login'으로 만듭니다.
+        // rewrite: (path) => path.replace(/^\/api/, '') 
+      }
+    }
+  }
 })
