@@ -55,7 +55,7 @@ const NewsListPage = () => {
     };
 
     fetchNewsWithKeywords();
-  }, []); //
+  }, []); // 
 
   // newsList가 비동기로 채워지므로, 로딩 상태를 한 번 더 확인합니다.
   const allKeywords = newsList.flatMap((news) => news.generated_keywords || []);
@@ -66,7 +66,7 @@ const NewsListPage = () => {
     const combinedText = newsList
       .map((news, i) => `뉴스 ${i + 1}. ${news.title}. 요약 내용: ${news.summaryText}`)
       .join(". ");
-    speak(combinedText); //
+    speak(combinedText, { type: 'main' });
   };
 
   if (loading) return <div>뉴스 데이터를 불러오는 중입니다...</div>;
