@@ -123,7 +123,7 @@ const NewsDetailPage = () => {
       뉴스 요약: ${clusterDetail.summary.article}.
       뉴스 배경지식: ${clusterDetail.summary.background}.
     `;
-    speak(text);
+    speak(text, { type: 'cluster', id: id });
   };
 
   const handleTitleClick = () => {

@@ -69,3 +69,25 @@ export const deleteComment = async (clusterId, commentId) => {
     throw error;
   }
 };
+
+// ⬇️ 5. TTS 설정 저장 (POST) ⬇️
+/**
+ * TTS 설정을 서버에 저장합니다.
+ * @param {object} settings
+ * @param {string} settings.voiceName
+ * @param {number} settings.pitch
+ * @param {number} settings.speakingRate
+ */
+export const saveTtsSettings = async ({ voiceName, pitch, speakingRate }) => {
+  try {
+    const response = await axiosInstance.post(API_ENDPOINTS.saveTtsSettings, {
+      voiceName,
+      pitch,
+      speakingRate,
+    });
+    return response.data; // 성공 응답 반환
+  } catch (error) {
+    console.error('Error saving TTS settings:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
