@@ -19,4 +19,7 @@ export const API_ENDPOINTS = {
   postComment: (clusterId) => `/cluster/${clusterId}/comment`,
   updateComment: (clusterId, commentId) => `/cluster/${clusterId}/comment/${commentId}`,
   deleteComment: (clusterId, commentId) => `/cluster/${clusterId}/comment/${commentId}`,
+
+  // --- 챗봇 관련 엔드포인트 ---
+  chat: `/chat`,
 };
