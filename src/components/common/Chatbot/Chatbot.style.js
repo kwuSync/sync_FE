@@ -6,7 +6,6 @@ const fadeIn = keyframes`
   to { opacity: 1; transform: translateY(0); }
 `;
 
-// --- (ChatbotWrapper, ChatButton, ChatButtonImg, CloseIcon, ChatWindow, ChatHeader, ChatTitle, HeaderCloseButton, ChatBody, ChatMessage, ChatFooter는 이전과 동일) ---
 
 export const ChatbotWrapper = styled.div`
   position: fixed;
@@ -22,8 +21,8 @@ export const ChatButton = styled.button`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.primary};
-  border: none;
+  background-color: #FCFBF9;
+  border: 1px solid ${({ theme }) => theme.colors.primary};
   display: flex;
   align-items: center;
   justify-content: center;
