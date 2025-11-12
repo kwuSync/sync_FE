@@ -8,6 +8,7 @@ import { TTSProvider } from './contexts/TTSContext';
 
 import tokenManager from './api/tokenManager';
 import { reissueToken } from './api/authApi';
+import Chatbot from './components/common/Chatbot/Chatbot';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -48,6 +49,7 @@ const App = () => {
         <Suspense fallback={<div>로딩 중...</div>}>
           <RouterProvider router={router} />
         </Suspense>
+        <Chatbot />
       </TTSProvider>
     </ThemeProvider>
   );

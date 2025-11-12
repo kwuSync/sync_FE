@@ -75,4 +75,41 @@ export const NewsSummary = styled.p`
   text-align: justify;
 `;
 
+// 페이지네이션 버튼 컨테이너
+export const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 20px;
+  gap: 16px;
+`;
 
+// '이전', '다음' 버튼
+export const PageMoveButton = styled.button`
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.primary};
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1.5px solid ${({ theme }) => theme.colors.primary};
+  background-color: #fff;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: #fff;
+  }
+
+  &:disabled {
+    color: #ccc;
+    border-color: #ddd;
+    cursor: not-allowed;
+  }
+`;
+
+// '1 / 5' 페이지 표시
+export const PageIndicator = styled.span`
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+`;

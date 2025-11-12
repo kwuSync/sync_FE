@@ -4,42 +4,41 @@ import { useNavigate } from "react-router-dom";
 import * as S from "./NewsListPage.style";
 import { getNewsList, getNewsSummary } from "../../api/newsApi";
 import { useTTS } from "../../contexts/TTSContext";
-import Header from "../../components/common/Header/Header"; // 1. 공통 Header 임포트
+import Header from "../../components/common/Header/Header";
 import NewsListSkeleton from "./NewsListSkeleton";
+
+const NEWS_PER_PAGE = 5;
 
 const NewsListPage = () => {
   const navigate = useNavigate();
-  // 2. Header가 TTS 상태를 관리하므로 speak, stop만 가져옵니다.
   const { speak, stop } = useTTS();
 
   const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    stop(); // 페이지 진입 시 기존 음성 멈추기
+    stop(); 
 
     const fetchNewsWithKeywords = async () => {
       setLoading(true);
       setError(null);
       try {
-        const rawNewsData = await getNewsList(); // 1. 뉴스 목록 가져오기
+        const rawNewsData = await getNewsList(); 
 
-        // 2. 각 뉴스 아이템의 clusterId로 요약 정보(키워드 포함)를 병렬로 가져오기
         const newsWithKeywordPromises = rawNewsData.map(async (newsItem) => {
           try {
-            // cluster_id는 image_2caf67.png에서 clusterId로 확인됨.
             const summaryData = await getNewsSummary(newsItem.clusterId);
             return {
               ...newsItem,
-              // summary API에서 가져온 generated_keywords를 추가
               generated_keywords: summaryData.generatedKeywords || [],
             };
           } catch (detailError) {
             console.warn(`뉴스 ID ${newsItem.clusterId}의 키워드를 불러오는 데 실패했습니다.`, detailError);
             return {
               ...newsItem,
-              generated_keywords: [], // 실패 시 빈 배열로 처리
+              generated_keywords: [], 
             };
           }
         });
@@ -56,19 +55,34 @@ const NewsListPage = () => {
     };
 
     fetchNewsWithKeywords();
-  }, []); // 
+  }, []); 
 
-  // newsList가 비동기로 채워지므로, 로딩 상태를 한 번 더 확인합니다.
-  const allKeywords = newsList.flatMap((news) => news.generated_keywords || []);
+  // --- 페이지네이션 계산 ---
+  const totalPages = Math.ceil(newsList.length / NEWS_PER_PAGE);
+  const startIndex = (currentPage - 1) * NEWS_PER_PAGE;
+  // 현재 페이지에 보여줄 뉴스 5개
+  const currentNewsList = newsList.slice(startIndex, startIndex + NEWS_PER_PAGE);
+
+  // --- ⬇️ (수정된 부분) 키워드 계산 ⬇️ ---
+  // (기존) const allKeywords = newsList.flatMap((news) => ...);
+  // 현재 페이지에 보이는 5개 뉴스의 키워드만 추출합니다.
+  const allKeywords = currentNewsList.flatMap((news) => news.generated_keywords || []);
   const uniqueKeywords = [...new Set(allKeywords)];
+  // --- ---------------------------------
 
   const handleTTSClick = () => {
-    if (newsList.length === 0) return;
-    const combinedText = newsList
+    if (currentNewsList.length === 0) return;
+    const combinedText = currentNewsList
       .map((news, i) => `뉴스 ${i + 1}. ${news.title}. 요약 내용: ${news.summaryText}`)
       .join(". ");
     speak(combinedText, { type: 'main' });
   };
+  
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0); 
+  };
+
 
   if (loading) return <NewsListSkeleton />;
   if (error) return <div>오류: {error}</div>;
@@ -76,10 +90,13 @@ const NewsListPage = () => {
 
   return (
     <S.PageWrapper>
-      {/* 3. 기존 S.Header JSX를 Header 컴포넌트로 교체 */}
       <Header onTTSClick={handleTTSClick} />
 
       <S.KeywordSection>
+        {/*
+          이제 uniqueKeywords는 currentNewsList(5개)에서 
+          추출되었으므로, 현재 페이지의 키워드만 렌더링됩니다.
+        */}
         <S.KeywordTitle>오늘의 키워드</S.KeywordTitle>
         <S.KeywordList>
           {uniqueKeywords.map((keyword, idx) => (
@@ -89,14 +106,13 @@ const NewsListPage = () => {
       </S.KeywordSection>
 
       <S.NewsSection>
-        {newsList.map((news) => (
+        {currentNewsList.map((news) => (
           <S.NewsCard key={news.clusterId}>
             <S.NewsCardTitle onClick={() => navigate(`/news/${news.clusterId}`)}>
               {news.title}
             </S.NewsCardTitle>
 
             <S.CardKeywordList>
-              {/* generated_keywords 필드를 사용하도록 변경 */}
               {news.generated_keywords && news.generated_keywords.map((keyword, idx) => (
                 <S.CardKeyword key={idx}>#{keyword}</S.CardKeyword>
               ))}
@@ -106,6 +122,27 @@ const NewsListPage = () => {
           </S.NewsCard>
         ))}
       </S.NewsSection>
+
+      {/* 페이지네이션 UI */}
+      {totalPages > 1 && (
+        <S.PaginationContainer>
+          <S.PageMoveButton
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            이전
+          </S.PageMoveButton>
+          <S.PageIndicator>
+            {currentPage} / {totalPages}
+          </S.PageIndicator>
+          <S.PageMoveButton
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            다음
+          </S.PageMoveButton>
+        </S.PaginationContainer>
+      )}
     </S.PageWrapper>
   );
 };
