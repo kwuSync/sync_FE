@@ -12,6 +12,7 @@ import * as S from "./NewsDetailPage.style";
 import Button from "../../components/common/Button/Button";
 import { useTTS } from "../../contexts/TTSContext";
 import Header from "../../components/common/Header/Header";
+import NewsDetailSkeleton from "./NewsDetailSkeleton";
 
 const NewsDetailPage = () => {
   const { id } = useParams(); // clusterId
@@ -106,7 +107,7 @@ const handleCommentSubmit = async () => {
     navigate("/news");
   };
 
-  if (loading) return <div>데이터를 불러오는 중입니다...</div>;
+  if (loading) return <NewsDetailSkeleton />;
   if (error) return <div>오류: {error}</div>;
   if (!clusterDetail) return <div>뉴스를 찾을 수 없습니다.</div>;
 

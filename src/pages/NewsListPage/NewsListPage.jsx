@@ -5,6 +5,7 @@ import * as S from "./NewsListPage.style";
 import { getNewsList, getNewsSummary } from "../../api/newsApi";
 import { useTTS } from "../../contexts/TTSContext";
 import Header from "../../components/common/Header/Header"; // 1. 공통 Header 임포트
+import NewsListSkeleton from "./NewsListSkeleton";
 
 const NewsListPage = () => {
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ const NewsListPage = () => {
     speak(combinedText, { type: 'main' });
   };
 
-  if (loading) return <div>뉴스 데이터를 불러오는 중입니다...</div>;
+  if (loading) return <NewsListSkeleton />;
   if (error) return <div>오류: {error}</div>;
   if (newsList.length === 0) return <div>표시할 뉴스가 없습니다.</div>;
 
